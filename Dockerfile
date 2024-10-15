@@ -1,14 +1,14 @@
-FROM python:3.12.4
+FROM buildkite/puppeteer
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3-pip git \
-    && rm -rf /var/lib/apt/lists/*
-RUN pip3 install --upgrade pip
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 
-WORKDIR /DxSpotifyDl
-RUN chmod 777 /DxSpotifyDl
-RUN apt update && apt upgrade -y && apt install ffmpeg python3 python3-pip -y
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt
-COPY . .
-CMD ["python3", "-m", "dxbotz"]
+RUN apt update && \
+    apt install -y  \
+    ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+
+## uncomment this for local testing
+COPY ./ /usr/local/lib/node_modules/spotify-dl/ 
+WORKDIR /download
+ENTRYPOINT ["spotifydl"]
+CMD ["--help"]
