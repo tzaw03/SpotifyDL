@@ -21,3 +21,5 @@ wget
 ffmpeg
 dnspython
 tswift
+psycopg2-binary==2.9.10
+SQLAlchemy
